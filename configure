@@ -1,0 +1,2 @@
+--with-gtk=3
+--disable-dumper
