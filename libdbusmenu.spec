@@ -6,7 +6,7 @@
 #
 Name     : libdbusmenu
 Version  : 16.04.0
-Release  : 3
+Release  : 4
 URL      : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
 Source0  : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
 Source99 : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz.asc
