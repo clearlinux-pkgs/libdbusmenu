@@ -6,17 +6,17 @@
 #
 Name     : libdbusmenu
 Version  : 16.04.0
-Release  : 4
+Release  : 5
 URL      : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
 Source0  : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
-Source99 : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz.asc
+Source1  : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz.asc
 Summary  : libdbusmenu-glib.
 Group    : Development/Tools
 License  : GPL-3.0 LGPL-2.1 LGPL-3.0
-Requires: libdbusmenu-data
-Requires: libdbusmenu-lib
-Requires: libdbusmenu-bin
-Requires: libdbusmenu-license
+Requires: libdbusmenu-data = %{version}-%{release}
+Requires: libdbusmenu-lib = %{version}-%{release}
+Requires: libdbusmenu-libexec = %{version}-%{release}
+Requires: libdbusmenu-license = %{version}-%{release}
 BuildRequires : docbook-xml
 BuildRequires : gettext
 BuildRequires : gtk-doc
@@ -25,6 +25,7 @@ BuildRequires : intltool
 BuildRequires : libxslt-bin
 BuildRequires : perl(XML::Parser)
 BuildRequires : pkgconfig(atk)
+BuildRequires : pkgconfig(dbusmenu-glib-0.4)
 BuildRequires : pkgconfig(gio-2.0)
 BuildRequires : pkgconfig(gio-unix-2.0)
 BuildRequires : pkgconfig(glib-2.0)
@@ -32,21 +33,12 @@ BuildRequires : pkgconfig(gobject-introspection-1.0)
 BuildRequires : pkgconfig(gtk+-3.0)
 BuildRequires : pkgconfig(json-glib-1.0)
 BuildRequires : pkgconfig(x11)
+BuildRequires : vala
 
 %description
 This is a small library designed to make sharing and displaying
 of menu structures over DBus simple and easy to use.  It works
 for both QT and GTK+ and makes building menus simple.
-
-%package bin
-Summary: bin components for the libdbusmenu package.
-Group: Binaries
-Requires: libdbusmenu-data
-Requires: libdbusmenu-license
-
-%description bin
-bin components for the libdbusmenu package.
-
 
 %package data
 Summary: data components for the libdbusmenu package.
@@ -59,10 +51,10 @@ data components for the libdbusmenu package.
 %package dev
 Summary: dev components for the libdbusmenu package.
 Group: Development
-Requires: libdbusmenu-lib
-Requires: libdbusmenu-bin
-Requires: libdbusmenu-data
-Provides: libdbusmenu-devel
+Requires: libdbusmenu-lib = %{version}-%{release}
+Requires: libdbusmenu-data = %{version}-%{release}
+Provides: libdbusmenu-devel = %{version}-%{release}
+Requires: libdbusmenu = %{version}-%{release}
 
 %description dev
 dev components for the libdbusmenu package.
@@ -79,11 +71,21 @@ doc components for the libdbusmenu package.
 %package lib
 Summary: lib components for the libdbusmenu package.
 Group: Libraries
-Requires: libdbusmenu-data
-Requires: libdbusmenu-license
+Requires: libdbusmenu-data = %{version}-%{release}
+Requires: libdbusmenu-libexec = %{version}-%{release}
+Requires: libdbusmenu-license = %{version}-%{release}
 
 %description lib
 lib components for the libdbusmenu package.
+
+
+%package libexec
+Summary: libexec components for the libdbusmenu package.
+Group: Default
+Requires: libdbusmenu-license = %{version}-%{release}
+
+%description libexec
+libexec components for the libdbusmenu package.
 
 
 %package license
@@ -96,31 +98,37 @@ license components for the libdbusmenu package.
 
 %prep
 %setup -q -n libdbusmenu-16.04.0
+cd %{_builddir}/libdbusmenu-16.04.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1534964118
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604617445
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static --with-gtk=3 \
 --disable-dumper
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1534964118
+export SOURCE_DATE_EPOCH=1604617445
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/libdbusmenu
-cp COPYING %{buildroot}/usr/share/doc/libdbusmenu/COPYING
-cp COPYING-GPL3 %{buildroot}/usr/share/doc/libdbusmenu/COPYING-GPL3
-cp COPYING.2.1 %{buildroot}/usr/share/doc/libdbusmenu/COPYING.2.1
+mkdir -p %{buildroot}/usr/share/package-licenses/libdbusmenu
+cp %{_builddir}/libdbusmenu-16.04.0/COPYING %{buildroot}/usr/share/package-licenses/libdbusmenu/e7d563f52bf5295e6dba1d67ac23e9f6a160fab9
+cp %{_builddir}/libdbusmenu-16.04.0/COPYING-GPL3 %{buildroot}/usr/share/package-licenses/libdbusmenu/842745cb706f8f2126506f544492f7a80dbe29b3
+cp %{_builddir}/libdbusmenu-16.04.0/COPYING.2.1 %{buildroot}/usr/share/package-licenses/libdbusmenu/9a1929f4700d2407c70b507b3b2aaf6226a9543c
 %make_install
 ## install_append content
 make -C libdbusmenu-glib install DESTDIR=%{buildroot}
@@ -129,17 +137,14 @@ make -C libdbusmenu-glib install DESTDIR=%{buildroot}
 %files
 %defattr(-,root,root,-)
 
-%files bin
-%defattr(-,root,root,-)
-/usr/libexec/dbusmenu-bench
-/usr/libexec/dbusmenu-testapp
-
 %files data
 %defattr(-,root,root,-)
 /usr/lib64/girepository-1.0/Dbusmenu-0.4.typelib
 /usr/lib64/girepository-1.0/DbusmenuGtk3-0.4.typelib
 /usr/share/gir-1.0/*.gir
 /usr/share/libdbusmenu/json/test-gtk-label.json
+/usr/share/vala/vapi/Dbusmenu-0.4.vapi
+/usr/share/vala/vapi/DbusmenuGtk3-0.4.vapi
 
 %files dev
 %defattr(-,root,root,-)
@@ -218,8 +223,13 @@ make -C libdbusmenu-glib install DESTDIR=%{buildroot}
 /usr/lib64/libdbusmenu-jsonloader.so.4
 /usr/lib64/libdbusmenu-jsonloader.so.4.0.12
 
-%files license
+%files libexec
 %defattr(-,root,root,-)
-/usr/share/doc/libdbusmenu/COPYING
-/usr/share/doc/libdbusmenu/COPYING-GPL3
-/usr/share/doc/libdbusmenu/COPYING.2.1
+/usr/libexec/dbusmenu-bench
+/usr/libexec/dbusmenu-testapp
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/libdbusmenu/842745cb706f8f2126506f544492f7a80dbe29b3
+/usr/share/package-licenses/libdbusmenu/9a1929f4700d2407c70b507b3b2aaf6226a9543c
+/usr/share/package-licenses/libdbusmenu/e7d563f52bf5295e6dba1d67ac23e9f6a160fab9
