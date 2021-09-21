@@ -6,7 +6,7 @@
 #
 Name     : libdbusmenu
 Version  : 16.04.0
-Release  : 5
+Release  : 6
 URL      : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
 Source0  : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz
 Source1  : https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz.asc
@@ -105,7 +105,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1604617445
+export SOURCE_DATE_EPOCH=1632198839
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -123,7 +123,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1604617445
+export SOURCE_DATE_EPOCH=1632198839
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libdbusmenu
 cp %{_builddir}/libdbusmenu-16.04.0/COPYING %{buildroot}/usr/share/package-licenses/libdbusmenu/e7d563f52bf5295e6dba1d67ac23e9f6a160fab9
@@ -161,7 +161,6 @@ make -C libdbusmenu-glib install DESTDIR=%{buildroot}
 /usr/include/libdbusmenu-gtk3-0.4/libdbusmenu-gtk/menu.h
 /usr/include/libdbusmenu-gtk3-0.4/libdbusmenu-gtk/menuitem.h
 /usr/include/libdbusmenu-gtk3-0.4/libdbusmenu-gtk/parser.h
-/usr/lib64/libdbusmenu-glib.la
 /usr/lib64/libdbusmenu-glib.so
 /usr/lib64/libdbusmenu-gtk3.so
 /usr/lib64/libdbusmenu-jsonloader.so
